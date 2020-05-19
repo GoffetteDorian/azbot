@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const fs = require("fs");
 const {prefix, token} = require("../config.json");
-const {players} = require("./assets/players.json");
+// const {players} = require("/players.json");
 
 const client = new Discord.Client();
 
@@ -26,17 +26,35 @@ client.on("message", (message) => {
         if (!args.length) {
             return message.channel.send("Missing arguments!");
         }
-        fs.writeFile(
-            "./assets/players.json",
-            JSON.stringify({...args}),
-            (err) => {
-                if (err) {
-                    console.error(err);
-                }
-            },
+
+        // const [pseudo, server];
+        const [pseudo, server] = args[0].split("-");
+
+        // fs.writeFile(
+        //     "./src/assets/players.json",
+        //     JSON.stringify({
+        //         [message.author]: {
+        //             main: pseudo,
+        //             server: server,
+        //             armory: `https://worldofwarcraft.com/fr-fr/character/eu/${pseudo}/${server}`,
+        //         },
+        //     }),
+        //     (err) => {
+        //         if (err) {
+        //             console.error(err);
+        //         }
+        //     },
+        // );
+
+        let users = JSON.parse(
+            fs.readFileSync("./src/assets/players.json", "utf-8"),
         );
-        console.log();
-        message.channel.send(`Character for ${message.author}`);
+        console.log(users);
+        message.channel.send(
+            `Character set for ${message.author}, armory: ${
+                users[message.author]
+            }`,
+        );
     }
 });
 
